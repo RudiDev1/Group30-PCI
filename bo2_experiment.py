@@ -74,7 +74,8 @@ class SwarmAgent(Agent[BestOf2Config]):
 
 class CustomSimulation(Simulation):
     def before_update(self) -> None:
-        
+        super().before_update()
+
         agents = self._agents
         total_agents = 100 
         
