@@ -73,8 +73,13 @@ class SwarmAgent(Agent[BestOf2Config]):
             self.continue_movement()
 
 class CustomSimulation(Simulation):
+    def __init__(self, config):
+        super().__init__(config)
+        self.current_tick = 0
     def before_update(self) -> None:
         super().before_update()
+
+        current = self.current_tick
 
         agents = self._agents
         total_agents = 100 
@@ -83,6 +88,9 @@ class CustomSimulation(Simulation):
         count_b: int = sum(1 for agent in agents if agent.commitment == 'B')
 
         threshold_agents = 0.8 * total_agents 
+
+        if current % 5000 == 0:
+            print(f"Threshold of A: {count_a}, B: {count_b} at {current}")
         
         if count_a >= threshold_agents or count_b >= threshold_agents:
             final_time: float = time.perf_counter()
@@ -90,6 +98,8 @@ class CustomSimulation(Simulation):
             print(f"Terminated due to Threshold Being Met A: {count_a}, B: {count_b}")
             print(f"Time - {total_time}")
             self.stop()
+        
+        self.current_tick += 1
 
 class ExperimentWindow(Window): ...
 
