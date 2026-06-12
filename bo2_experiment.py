@@ -2,11 +2,13 @@ from dataclasses import dataclass
 import random
 from vi import Agent, Simulation, Window
 from vi.config import Config
+import time
 
 # randomness setup
 random.seed(a=42)
 # global vars to return
 votes: dict = {"A": 0, "B":0}
+start_time: float = time.perf_counter()
 @dataclass
 class BestOf2Config(Config): ...
 class SwarmAgent(Agent[BestOf2Config]):
@@ -32,7 +34,7 @@ class SwarmAgent(Agent[BestOf2Config]):
             self.decision()
             self.state = "dissamination"
         elif self.state == "dissamination":
-            self.freeze_movement()
+            #self.freeze_movement()
             count = 0
             for agent, _ in self.in_proximity_accuracy():
                 if agent.commitment == self.commitment:
@@ -70,7 +72,19 @@ class SwarmAgent(Agent[BestOf2Config]):
             self.state = "exploration"
             self.continue_movement()
         
-class ExperimentWindow(Window): ...
+class ExperimentWindow(Window):
+    def stop_condition(self) -> bool:
+        agents = self._sim._agents
+        total_agents = 100 #hardcoded - remember to change if we change num agents
+        
+        count_a: int = sum(1 for agent in agents if agent.commitment == 'A')
+        count_b: int = sum(1 for agent in agents if agent.commitment == 'B')
+
+        threshold_agents = 0.8 * total_agents #again threshold is hardcoded to 80% consensus - remember to change
+        if count_a >= threshold_agents or count_b >= threshold_agents:
+            print('Terminated due to Agent Threshold Being Met')
+            return True
+        return False
 
 
 (
