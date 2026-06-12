@@ -6,8 +6,6 @@ import time
 
 # randomness setup
 random.seed(a=42)
-# global vars to return
-votes: dict = {"A": 0, "B":0}
 start_time: float = time.perf_counter()
 @dataclass
 class BestOf2Config(Config): ...
@@ -37,22 +35,21 @@ class SwarmAgent(Agent[BestOf2Config]):
             #self.freeze_movement()
             count = 0
             for agent, _ in self.in_proximity_accuracy():
-                if agent.commitment == self.commitment:
+                if agent.commitment == "uncommited":
+                    pass
+                elif agent.commitment == self.commitment:
                     count += 1
                 elif agent.commitment != self.commitment:
                     count -= 1
                 else: #change the commitment to first neighbour option if uncommited
                     self.commitment = agent.commitment 
                     break
-            if count <= 0:
+            if count < 0:
                 self.commitment = "uncommited"
-                self.state = "voting"
-            else:
-                self.state = "voting"
+                self.change_image(0)
+            self.state = "voting"
         elif self.state == "voting":
             self.voting()
-        elif self.state == "wait":
-            pass
     def decision(self):
         if self.counter["A"] > self.counter["B"]:
             self.commitment = "A"
@@ -61,13 +58,19 @@ class SwarmAgent(Agent[BestOf2Config]):
         #the ones with equal number of encounters (by chance) stay uncommited
     def voting(self):
         if self.commitment == "A":
-            votes["A"] += 1
             self.change_image(1)
-            self.state = "wait"
+            x = self.prng.random()
+            if x <= 0.5:
+                self.state = "exploration"
+            elif x > 0.5:
+                self.state = "dissamination"
         elif self.commitment == "B":
-            votes["B"] += 1
             self.change_image(2)
-            self.state = "wait"
+            x = self.prng.random()
+            if x <= 0.5:
+                self.state = "exploration"
+            elif x > 0.5:
+                self.state = "dissamination"
         else:
             self.state = "exploration"
             self.continue_movement()
@@ -87,7 +90,7 @@ class CustomSimulation(Simulation):
         count_a: int = sum(1 for agent in agents if agent.commitment == 'A')
         count_b: int = sum(1 for agent in agents if agent.commitment == 'B')
 
-        threshold_agents = 0.8 * total_agents 
+        threshold_agents = 0.8* total_agents 
 
         if current % 5000 == 0:
             print(f"Threshold of A: {count_a}, B: {count_b} at {current}")
@@ -104,9 +107,8 @@ class CustomSimulation(Simulation):
 class ExperimentWindow(Window): ...
 
 (
-    CustomSimulation(BestOf2Config(image_rotation=False, movement_speed=1, radius=15, window=ExperimentWindow(), duration = 80000, visualise_chunks = True))
+    CustomSimulation(BestOf2Config(image_rotation=False, movement_speed=1, radius=15, window=ExperimentWindow(), duration = 8000, visualise_chunks = True))
     .spawn_site(image_path="images/images.png", x = 750 //2, y = 750 //2)
     .batch_spawn_agents(100, SwarmAgent, images=["images/triangle.png", "images/green.png", "images/red.png"])   
     .run()
 )
-print(votes)
