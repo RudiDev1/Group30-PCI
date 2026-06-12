@@ -22,10 +22,8 @@ class SwarmAgent(Agent[BestOf2Config]):
     def update(self):
         if self.state == "exploration" and self.states["exploration"] >= self.ticks:
             if self.on_site():
-                if self.prng.random() < 0.7:
                     self.counter["A"] += 1
             else:
-                if self.prng.random() < 0.3:
                     self.counter["B"] += 1
             self.ticks += 1
         elif self.state == "exploration" and self.states["exploration"] < self.ticks:
@@ -92,7 +90,7 @@ class CustomSimulation(Simulation):
 
         threshold_agents = 0.8* total_agents 
 
-        if current % 5000 == 0:
+        if current % 2000 == 0:
             print(f"Threshold of A: {count_a}, B: {count_b} at {current}")
         
         if count_a >= threshold_agents or count_b >= threshold_agents:
@@ -107,7 +105,7 @@ class CustomSimulation(Simulation):
 class ExperimentWindow(Window): ...
 
 (
-    CustomSimulation(BestOf2Config(image_rotation=False, movement_speed=1, radius=15, window=ExperimentWindow(), duration = 8000, visualise_chunks = True))
+    CustomSimulation(BestOf2Config(image_rotation=False, movement_speed=1, radius=75, window=ExperimentWindow(), duration = 80000, visualise_chunks = True))
     .spawn_site(image_path="images/images.png", x = 750 //2, y = 750 //2)
     .batch_spawn_agents(100, SwarmAgent, images=["images/triangle.png", "images/green.png", "images/red.png"])   
     .run()
