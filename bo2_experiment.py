@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 import random
+from multiprocessing import Pool
 from vi import Agent, Simulation, Window, Matrix
 from vi.config import Config
 import time
 
 start_time: float = time.perf_counter()
 @dataclass
+class BestOf2Config(Config): ...
 class SwarmAgent(Agent):
     config: Config
     def __init__(self, images, simulation, pos = None, move = None):
@@ -113,7 +115,12 @@ def run_simulation(config):
     )
 
 if __name__ == "__main__":
-    matrix = Matrix(fps_limit= 60, movement_speed=1, radius=[15, 30, 50, 75, 100, 150], window=ExperimentWindow(), duration = 432000, seed= 42, visualise_chunks= True)
+    radius_experiemnt = [15, 30, 50, 75, 100, 150] 
+    i = 0
+    matrix = Matrix(fps_limit=60, movement_speed=1, radius=radius_experiemnt, window=ExperimentWindow(), duration = 432000, seed= 42, visualise_chunks= True)
     configs = matrix.to_configs(Config)
     for config in configs:
+        print(f"Radius Tested {radius_experiemnt[i]}")
         run_simulation(config)
+        i += 1
+        print("--------------")
