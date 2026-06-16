@@ -1,15 +1,13 @@
 from dataclasses import dataclass
 import random
-from vi import Agent, Simulation, Window
+from vi import Agent, Simulation, Window, Matrix
 from vi.config import Config
 import time
 
-# randomness setup
-random.seed(a=42)
 start_time: float = time.perf_counter()
 @dataclass
-class BestOf2Config(Config): ...
-class SwarmAgent(Agent[BestOf2Config]):
+class SwarmAgent(Agent):
+    config: Config
     def __init__(self, images, simulation, pos = None, move = None):
         super().__init__(images, simulation, pos, move)
         self.counter: dict = {"A": 0, "B":0} #Amount of time spent in each nest during the exploretion
@@ -91,9 +89,8 @@ class CustomSimulation(Simulation):
         count_a: int = sum(1 for agent in agents if agent.commitment == 'A')
         count_b: int = sum(1 for agent in agents if agent.commitment == 'B')
 
-        threshold_agents = total_agents 
-
-        if current % 1002 == 0:
+        threshold_agents = 0.9 * total_agents 
+        if current % 1002 == 0 and current != 0:
             print(f"Threshold of A: {count_a}, B: {count_b} at {current}")
         
         if count_a >= threshold_agents or count_b >= threshold_agents:
@@ -107,9 +104,16 @@ class CustomSimulation(Simulation):
 
 class ExperimentWindow(Window): ...
 
-(
-    CustomSimulation(BestOf2Config(image_rotation=False, movement_speed=1, radius=50, window=ExperimentWindow(), duration = 80000, visualise_chunks = True))
+def run_simulation(config):
+    (
+    CustomSimulation(config)
     .spawn_site(image_path="images/images.png", x = 750 //2, y = 750 //2)
     .batch_spawn_agents(100, SwarmAgent, images=["images/triangle.png", "images/green.png", "images/red.png"])   
     .run()
-)
+    )
+
+if __name__ == "__main__":
+    matrix = Matrix(fps_limit= 60, movement_speed=1, radius=[15, 30, 50, 75, 100, 150], window=ExperimentWindow(), duration = 432000, seed= 42, visualise_chunks= True)
+    configs = matrix.to_configs(Config)
+    for config in configs:
+        run_simulation(config)
