@@ -169,7 +169,7 @@ def run_simulation(config):
 
 if __name__ == "__main__":
     radius_experiment = [num for num in range(10, 61, 5)] 
-    seed_experiment = [42, 78, 93]
+    seed_experiment = [42, 78, 93, 128, 256, 512, 789, 10234, 8908, 65894, 873492, 29823]
     matrix = Matrix(fps_limit=60, movement_speed=1, radius=radius_experiment, window=ExperimentWindow(), duration = 432000, seed= seed_experiment, visualise_chunks= True)
     configs = matrix.to_configs(Config)
     for config in configs:
