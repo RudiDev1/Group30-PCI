@@ -1,4 +1,4 @@
-# Group 30 - Project Collective Intelligence Vrije University Amsterdam 
+# Group 30 - Project Collective Intelligence Vrije Universiteit Amsterdam
 ### Description
 This repository represents the code for the experiment in decision-making topic of collective intelligence. 
 ### Creating enviorment
