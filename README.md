@@ -11,5 +11,5 @@ uv run bo2_experiment.py
 ```
 #### Using pip installation:
 ```sh
-python bo2_exxperiment.py 
+python bo2_experiment.py 
 ```
