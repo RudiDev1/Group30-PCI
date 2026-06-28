@@ -1,23 +1,15 @@
-# Violet Starter Kit
-
-The Violet Starter Kit includes a couple of [images](./images) for you to use in your simulations.
-In addition, it includes a [template](./flocking.py) which you can use to build the flocking simulation.
-
-Simply click on the shiny green `Use this template` button at the top of this page to create your own GitHub repository.
-From there, [clone your repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) with either:
-- [GitHub Desktop](https://desktop.github.com) (recommended)
-- [The GitHub CLI](https://cli.github.com)
-- or manually with the `git clone` command
-
-## Getting Started
-
-[Violet](https://github.com/m-rots/violet) is built on top of the latest and greatest Python features such as type hints, generics and dataclasses.
-Therefore, you need to have the latest version of Python installed: Python 3.13 or later.
-
-The easiest way of installing the latest version of Python, as well as creating a virtual environment, is by installing [uv](https://docs.astral.sh/uv/getting-started/installation/).
-
-Once installed, simply run the following command to run the code:
-
+# Group 30 - Project Collective Intelligence Vrije University Amsterdam 
+### Description
+This repository represents the code for the experiment in decision-making topic of collective intelligence. 
+### Creating enviorment
+In order to run this project follow the guide of installing violet python package [Violet](https://github.com/m-rots/violet)
+### Running the simulation
+After copying the github repository please run the following command in command line to run the simulation
+#### Using uv:
 ```sh
-uv run flocking.py
+uv run bo2_experiment.py
+```
+#### Using pip installation:
+```sh
+python bo2_exxperiment.py 
 ```

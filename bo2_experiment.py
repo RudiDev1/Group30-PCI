@@ -83,7 +83,6 @@ class SwarmAgent(Agent):
                 self.state = "dissamination"
         else:
             self.state = "exploration"
-            self.continue_movement()
 
 class CustomSimulation(HeadlessSimulation):
     def __init__(self, config):
@@ -169,7 +168,7 @@ def run_simulation(config):
 
 if __name__ == "__main__":
     radius_experiment = [num for num in range(10, 61, 5)] 
-    seed_experiment = [42, 78, 93, 128, 256, 512, 789, 10234, 8908, 65894, 873492, 29823]
+    seed_experiment = [42, 78, 93, 128, 256, 512, 789, 1911, 2043, 611, 879, 900, 1045, 5664, 7689, 8908, 10234, 29823, 65894, 873492]
     matrix = Matrix(fps_limit=60, movement_speed=1, radius=radius_experiment, window=ExperimentWindow(), duration = 432000, seed= seed_experiment, visualise_chunks= True)
     configs = matrix.to_configs(Config)
     for config in configs:
